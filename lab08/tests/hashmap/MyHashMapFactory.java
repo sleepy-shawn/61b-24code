@@ -12,11 +12,12 @@ import java.util.Collection;
  */
 public class MyHashMapFactory {
 
-    /** Returns a MyHashMap with the specified bucket type.
+    /**
+     * Returns a MyHashMap with the specified bucket type.
      * @param bucketType the type of bucket to use
      */
     public static <K, V> MyHashMap<K, V> createBucketedMap(Class<? extends Collection> bucketType) {
-        return new MyHashMap<>() {
+        return new MyHashMap<K, V>() { // Explicitly specify <K, V> instead of using <>
             @Override
             protected Collection<Node> createBucket() {
                 try {
@@ -26,7 +27,6 @@ public class MyHashMapFactory {
                 }
             }
 
-            // for the timing tests
             @Override
             public String toString() {
                 return "MyHashMap with " + bucketType.getSimpleName() + " buckets";
@@ -34,3 +34,4 @@ public class MyHashMapFactory {
         };
     }
 }
+

@@ -309,10 +309,12 @@ public class TestMyHashMap {
 
         @Override
         public boolean equals(Object o) {
-            if (o instanceof Bee other) {
+            if (o instanceof Bee) {
+                Bee other = (Bee) o;
                 return Math.abs(b - other.b) < 61;
             }
             return false;
         }
+
     }
 }

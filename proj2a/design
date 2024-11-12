@@ -1,0 +1,4 @@
+For NGramMap
+1. using hash map for word map as it is faster.
+2. Hash map stores timeseries and its corresponding string
+3.
