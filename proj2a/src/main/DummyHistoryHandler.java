@@ -23,12 +23,12 @@ public class DummyHistoryHandler extends NgordnetQueryHandler {
 
         TimeSeries parabola = new TimeSeries();
         for (int i = 1400; i < 1500; i += 1) {
-            parabola.put(i, (i - 50.0) * (i - 50.0) + 3);
+            parabola.put(i, 900.0);
         }
 
         TimeSeries sinWave = new TimeSeries();
         for (int i = 1400; i < 1500; i += 1) {
-            sinWave.put(i, 1000 + 500 * Math.sin(i/100.0*2*Math.PI));
+            sinWave.put(i, 10000.0);
         }
 
         ArrayList<TimeSeries> lts = new ArrayList<>();

@@ -23,7 +23,6 @@ import static ngrams.TimeSeries.MIN_YEAR;
 public class NGramMap {
     public HashMap<String, TimeSeries> wordMap;
     public TimeSeries totalData;
-    // TODO: Add any necessary static/instance variables.
 
     /**
      * Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME.
@@ -65,9 +64,15 @@ public class NGramMap {
      * returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word, int startYear, int endYear) {
-        startYear = Math.max(MIN_YEAR, startYear);
-        endYear = Math.min(MAX_YEAR, endYear);
-        return new TimeSeries(wordMap.get(word), startYear, endYear);
+        if (wordMap.containsKey(word)) {
+            startYear = Math.max(MIN_YEAR, startYear);
+            endYear = Math.min(MAX_YEAR, endYear);
+            TimeSeries wordSeries = wordMap.get(word);
+            if (yearContain(wordSeries, startYear) || yearContain(wordSeries, endYear)) {
+                return new TimeSeries(wordSeries, startYear, endYear);
+            }
+        }
+        return new TimeSeries();
     }
 
     /**
@@ -77,9 +82,13 @@ public class NGramMap {
      * is not in the data files, returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word) {
-        TimeSeries copy = new TimeSeries();
-        copy.putAll(wordMap.get(word));
-        return copy;
+        if (wordMap.containsKey(word)) {
+            TimeSeries copy = new TimeSeries();
+            copy.putAll(wordMap.get(word));
+            return copy;
+        } else {
+            return new TimeSeries();
+        }
     }
 
     /**
@@ -111,10 +120,13 @@ public class NGramMap {
      * TimeSeries.
      */
     public TimeSeries weightHistory(String word) {
-        TimeSeries division = countHistory(word);
-        TimeSeries totalCopy = totalCountHistory();
-        division = division.dividedBy(totalData);
-        return division;
+        if (wordMap.containsKey(word)) {
+            TimeSeries division = countHistory(word);
+            TimeSeries totalCopy = totalCountHistory();
+            division = division.dividedBy(totalCopy);
+            return division;
+        }
+        return new TimeSeries();
     }
 
     /**
@@ -143,6 +155,11 @@ public class NGramMap {
         return sumWeight;
     }
 
-    // TODO: Add any private helper methods.
-    // TODO: Remove all TODO comments before submitting.
+    private boolean yearContain(TimeSeries word, int year) {
+        return word.years().contains(year);
+    }
+
+    private TimeSeries getData(String word) {
+        return wordMap.get(word);
+    }
 }
