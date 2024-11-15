@@ -1,0 +1,17 @@
+1. Hyponyms Handler (Basic Case）
+先只考虑单个单词，不考虑year
+返回列表[下位词 + 本身]， 无重复， 字符顺序
+
+具体类： directed acyclic graph read from wordnet; 返回下位词； helper path class； 读取class; disjointed set
+
+wordnet 作为parser wrapper for graph
+
+wordnet 两种数据： 同义词集列表和下位词集列表 constructor  +  additional methods
+
+graph is a api like timeseries.
+
+without remove edge
+
+! graph class
+! handler class
+! parser class
