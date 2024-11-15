@@ -3,6 +3,7 @@ package main;
 import browser.NgordnetServer;
 import demo.DummyHistoryHandler;
 import demo.DummyHistoryTextHandler;
+import graph.Parser;
 import org.slf4j.LoggerFactory;
 
 public class Main {
@@ -31,10 +32,11 @@ public class Main {
     public static void main(String[] args) {
         NgordnetServer hns = new NgordnetServer();
 
+        Parser wordParser = new Parser("./data/wordnet/synsets11.txt", ".data/wordnet/hyponyms11.txt");
         hns.startUp();
         hns.register("history", new DummyHistoryHandler());
         hns.register("historytext", new DummyHistoryTextHandler());
-        hns.register("hyponyms", new HyponymsHandler());
+        hns.register("hyponyms", new HyponymsHandler(wordParser));
 
         System.out.println("Finished server startup! Visit http://localhost:4567/ngordnet.html");
     }

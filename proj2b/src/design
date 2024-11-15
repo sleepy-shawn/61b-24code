@@ -15,3 +15,10 @@ without remove edge
 ! graph class
 ! handler class
 ! parser class
+
+Now I have a hidden error:
+Whether should I associate ID with the map index.
+
+A important choice is that I change the adjacentList from arraylist to map.
+
+It seems  that I violate the abstract barrier.
