@@ -7,13 +7,11 @@ public class WordGraph {
 
 	private HashMap<Integer, ArrayList<Integer>> adjacentList;
 	private HashMap<Integer, ArrayList<String>> wordMap;
-	private int verticesNum;
 
 	/* Constructor, create a graph with V vertices. */
 	public WordGraph() {
 		adjacentList = new HashMap<>();
 		wordMap = new HashMap<>();
-		verticesNum = 0;
 	}
 
 	/* Add an edge v-w, remember graph is directed*/
@@ -29,15 +27,9 @@ public class WordGraph {
 		return adjacentList.get(v);
 	}
 
-	/* Number of vertices */
-	private int V() {
-		return verticesNum;
-	}
-
 	/* Create node */
-	public void addNode(ArrayList<String> words) {
-		wordMap.put(verticesNum, words);
-		verticesNum += 1;
+	public void addNode(int id, ArrayList<String> words) {
+		wordMap.put(id, words);
 	}
 
 	/* Get nodes which contain the aim word,

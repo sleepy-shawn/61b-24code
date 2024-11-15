@@ -28,7 +28,7 @@ public class Parser {
 			String[] words = word.split(" ");
 			ArrayList<String> wordList = new ArrayList<>(Arrays.asList(words));
 			idMap.put(id, wordNum);
-			totalWords.addNode(wordList);
+			totalWords.addNode(id, wordList);
 			wordNum += 1;
 		}
 
