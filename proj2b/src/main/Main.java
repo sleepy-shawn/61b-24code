@@ -32,7 +32,7 @@ public class Main {
     public static void main(String[] args) {
         NgordnetServer hns = new NgordnetServer();
 
-        Parser wordParser = new Parser(SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        Parser wordParser = new Parser(LARGE_SYNSET_FILE, LARGE_HYPONYM_FILE);
         hns.startUp();
         hns.register("history", new DummyHistoryHandler());
         hns.register("historytext", new DummyHistoryTextHandler());

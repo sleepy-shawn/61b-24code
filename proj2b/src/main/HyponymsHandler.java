@@ -3,7 +3,6 @@ package main;
 import browser.NgordnetQuery;
 import browser.NgordnetQueryHandler;
 import graph.Parser;
-import graph.WordGraph;
 
 import java.util.List;
 
@@ -18,10 +17,6 @@ public class HyponymsHandler extends NgordnetQueryHandler {
 	@Override
 	public String handle(NgordnetQuery q) {
 		List<String> words = q.words();
-		String response = "";
-		for (String word : words) {
-			response += wordParser.hyponymsList(word) + "\n";
-		}
-		return response;
+		return wordParser.sharedHyponyms(words).toString();
 	}
 }

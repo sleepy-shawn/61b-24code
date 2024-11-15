@@ -2,9 +2,7 @@ package graph;
 
 import edu.princeton.cs.algs4.In;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 public class Parser {
 
@@ -48,8 +46,26 @@ public class Parser {
 		}
 	}
 
-	public ArrayList<String> hyponymsList (String word) {
+	public ArrayList<String> hyponymsList(String word) {
 		return totalWords.findHyponyms(word);
 	}
 
+	public ArrayList<String> sharedHyponyms(List<String> words) {
+		/* If the user don't input words */
+		if (words == null || words.isEmpty()) {
+			return new ArrayList<>();
+		}
+
+		HashSet<String> sharedHyponyms = new HashSet<>(hyponymsList(words.getFirst()));
+		for (int i = 1; i < words.size(); i += 1) {
+			ArrayList<String> hyponyms = hyponymsList(words.get(i));
+			sharedHyponyms.retainAll(hyponyms);
+			if (sharedHyponyms.isEmpty()) {
+				return new ArrayList<>();
+			}
+		}
+		ArrayList<String> sharedList = new ArrayList<>(sharedHyponyms);
+		Collections.sort(sharedList);
+		return sharedList;
+	}
 }

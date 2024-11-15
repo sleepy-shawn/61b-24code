@@ -131,6 +131,6 @@ Tested scenarios with words that have no hyponyms, words not present in the syns
 10. Conclusion
 The design of the Hyponyms Handler project focuses on efficient data processing, modularity, and adherence to object-oriented principles. By correctly parsing the WordNet data and representing it using appropriate data structures, the application successfully retrieves hyponyms for given words. The careful consideration of design choices and error handling ensures that the application is robust and maintainable.
 
-Note: In your implementation, you mentioned a concern about potentially violating the abstraction barrier by associating IDs with map indices. In this design, we've addressed this by using the idMap to keep the mapping internal to the Parser class, thereby preserving abstraction. The WordGraph class operates with node indices without needing to know about WordNet IDs.
-
-If you have any further questions or need additional clarification on any section, feel free to ask!
+Add:
+1. use retain to find the shared hyponyms of all.
+2. 提升方案 直接用ID作为映射！！！
