@@ -1,24 +1,136 @@
-1. Hyponyms Handler (Basic Case）
-先只考虑单个单词，不考虑year
-返回列表[下位词 + 本身]， 无重复， 字符顺序
+Design Document for Hyponyms Handler Project
+1. Introduction
+The Hyponyms Handler project aims to process and retrieve hyponyms (subordinate words) of a given word using data from WordNet. The application reads synsets and hyponyms from WordNet data files, constructs a directed acyclic graph (DAG) to represent word relationships, and provides functionality to query hyponyms of specific words.
 
-具体类： directed acyclic graph read from wordnet; 返回下位词； helper path class； 读取class; disjointed set
+This document outlines the design and implementation details of the project, including the classes, data structures, algorithms used, and design decisions made during development.
 
-wordnet 作为parser wrapper for graph
+2. Design Goals and Requirements
+Basic Functionality: For a single input word, return a list containing its hyponyms and the word itself.
+Data Integrity: Ensure no duplicate words in the output list.
+Ordering: Output list should be sorted alphabetically.
+Efficiency: Optimize data structures and algorithms for efficient retrieval.
+Modularity: Design classes to handle specific responsibilities, adhering to object-oriented principles.
+Abstraction: Maintain clear abstraction barriers between classes to facilitate maintenance and scalability.
+3. High-Level Design
+The application consists of three main components:
 
-wordnet 两种数据： 同义词集列表和下位词集列表 constructor  +  additional methods
+Parser Class: Responsible for reading WordNet data files, parsing synsets and hyponyms, and constructing the word graph.
+WordGraph Class: Represents the DAG of word relationships, providing methods to add nodes and edges, and to find hyponyms.
+HyponymsHandler Class: Extends NgordnetQueryHandler to handle queries for hyponyms, utilizing the Parser and WordGraph classes.
+4. Classes and Data Structures
+4.1 Parser Class
+Purpose: Reads synset and hyponym data from files and builds the word graph.
+Attributes:
+idMap: A HashMap<Integer, Integer> mapping WordNet IDs to graph node indices.
+totalWords: An instance of WordGraph representing the entire word graph.
+wordNum: An integer counter for the number of words/nodes.
+4.2 WordGraph Class
+Purpose: Represents the DAG of words, with nodes as words or synsets and edges as hyponym relationships.
+Attributes:
+adjacentList: A HashMap<Integer, List<Integer>> mapping node indices to lists of adjacent node indices.
+wordMap: A HashMap<Integer, List<String>> mapping node indices to lists of words.
+verticesNum: An integer tracking the number of vertices in the graph.
+4.3 HyponymsHandler Class
+Purpose: Handles hyponym queries by integrating with the parser and graph classes.
+Attributes:
+wordParser: An instance of Parser used to access hyponym data.
+5. Detailed Design
+5.1 Parser Class Implementation
+Constructor:
 
-graph is a api like timeseries.
+Reads synset data:
+Parses each line to extract the ID and words.
+Splits the words correctly using split(" ") to separate words by spaces.
+Adds each synset as a node in the WordGraph.
+Maps WordNet IDs to graph node indices using idMap.
+Reads hyponym data:
+Parses each line to extract source and target IDs.
+Maps these IDs to graph node indices.
+Adds edges in the WordGraph to represent hyponym relationships.
+Methods:
 
-without remove edge
+hyponymsList(String word): Returns a list of hyponyms for a given word by delegating to the WordGraph.
+5.2 WordGraph Class Implementation
+Adding Nodes:
 
-! graph class
-! handler class
-! parser class
+addNode(List<String> words): Adds a node to the graph with the given list of words, updating wordMap and verticesNum.
+Adding Edges:
 
-Now I have a hidden error:
-Whether should I associate ID with the map index.
+addEdge(int v, int w): Adds a directed edge from node v to node w in adjacentList.
+Adjacency Retrieval:
 
-A important choice is that I change the adjacentList from arraylist to map.
+adj(int v): Returns the list of adjacent nodes for node v. Uses getOrDefault to return an empty list if no adjacent nodes exist.
+Finding Hyponyms:
 
-It seems  that I violate the abstract barrier.
+findHyponyms(String word):
+Identifies all nodes containing the target word using getWordLists.
+Initiates a recursive search with recursFind to collect all hyponyms.
+Sorts and returns the list of hyponyms.
+Recursive Search Helper:
+
+recursFind(Set<String> results, List<Integer> indexLists):
+Recursively traverses the graph, starting from the given nodes.
+Adds words from each node to results.
+Continues traversal to adjacent nodes.
+5.3 HyponymsHandler Class Implementation
+Handling Queries:
+handle(NgordnetQuery q):
+Retrieves the list of words from the query.
+For each word, calls wordParser.hyponymsList(word) to get hyponyms.
+Accumulates responses using a StringBuilder for efficiency.
+Returns the concatenated string of hyponyms lists.
+6. Key Methods and Algorithms
+Word Splitting Correction:
+
+Correctly splits synset words using split(" ") instead of split(""), ensuring words are separated by spaces, not characters.
+Adjacency List Handling:
+
+Uses getOrDefault in adj(int v) to prevent NullPointerException when a node has no adjacent nodes.
+Recursive Hyponym Collection:
+
+The recursFind method uses depth-first traversal to collect all reachable hyponyms from the starting nodes.
+Avoiding Duplicates:
+
+Uses a HashSet<String> to store hyponyms, ensuring no duplicates in the result.
+Sorting Results:
+
+Converts the HashSet to a List and sorts it alphabetically before returning.
+7. Design Decisions
+Data Structures:
+
+HashMap for adjacentList:
+Chose HashMap<Integer, List<Integer>> over an array-based list to handle sparse graphs efficiently and to improve lookup times.
+HashSet for Hyponyms:
+Ensures uniqueness of hyponyms collected during traversal.
+Mapping IDs to Indices:
+
+Used idMap to associate WordNet IDs with graph node indices, facilitating efficient graph operations without exposing raw IDs.
+Abstraction Barrier:
+
+Separated the concerns of parsing data (Parser class) and representing the graph (WordGraph class) to maintain modularity and adhere to abstraction principles.
+8. Error Handling and Edge Cases
+Null Checks:
+
+Added null checks in recursive methods to prevent NullPointerException when encountering nodes with no edges.
+Input Validation:
+
+Ensured methods handle cases where the input word does not exist in the graph by returning empty lists.
+Off-by-One Errors:
+
+Carefully managed indices when adding nodes and edges to prevent off-by-one errors.
+9. Testing Strategy
+Unit Tests:
+
+Wrote unit tests for each class and method to verify functionality with known inputs and expected outputs.
+Sample Data Testing:
+
+Used small, sample synset and hyponym files to manually verify that the graph is constructed correctly and that hyponym retrieval works as intended.
+Edge Case Testing:
+
+Tested scenarios with words that have no hyponyms, words not present in the synset file, and words with multiple hyponym paths.
+10. Conclusion
+The design of the Hyponyms Handler project focuses on efficient data processing, modularity, and adherence to object-oriented principles. By correctly parsing the WordNet data and representing it using appropriate data structures, the application successfully retrieves hyponyms for given words. The careful consideration of design choices and error handling ensures that the application is robust and maintainable.
+
+Note: In your implementation, you mentioned a concern about potentially violating the abstraction barrier by associating IDs with map indices. In this design, we've addressed this by using the idMap to keep the mapping internal to the Parser class, thereby preserving abstraction. The WordGraph class operates with node indices without needing to know about WordNet IDs.
+
+If you have any further questions or need additional clarification on any section, feel free to ask!

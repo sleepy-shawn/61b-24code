@@ -1,16 +1,13 @@
 package graph;
 
-import edu.princeton.cs.algs4.In;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.*;
 
 public class WordGraph {
 
-	HashMap<Integer, ArrayList<Integer>> adjacentList;
-	HashMap<Integer, ArrayList<String>> wordMap;
-	int verticesNum;
-	int edgesNum;
+	private HashMap<Integer, ArrayList<Integer>> adjacentList;
+	private HashMap<Integer, ArrayList<String>> wordMap;
+	private int verticesNum;
 
 	/* Constructor, create a graph with V vertices. */
 	public WordGraph() {
@@ -28,12 +25,12 @@ public class WordGraph {
 	}
 
 	/* Vertices adjacent to v */
-	ArrayList<Integer> adj(int v) {
+	private ArrayList<Integer> adj(int v) {
 		return adjacentList.get(v);
 	}
 
 	/* Number of vertices */
-	int V() {
+	private int V() {
 		return verticesNum;
 	}
 
@@ -63,17 +60,18 @@ public class WordGraph {
 
 	/* Helper methods for recursively find the all below hyponyms */
 	private void recursFind(HashSet<String> results, ArrayList<Integer> indexLists) {
-		if (indexLists.isEmpty()) {
+		if (indexLists == null) {
 			return;
 		}
 		for (int i : indexLists) {
-			for (int j : adj(i)) {
-				results.addAll(wordMap.get(j));
-			}
+			results.addAll(wordMap.get(i));
 			recursFind(results, adj(i));
 		}
 	}
 
+	/* First find all nodes that contain the word, add the words in the nodes;
+	then recursively find the adjacent nodes of these nodes until we fall off the graph.
+	 */
 	public ArrayList<String> findHyponyms(String word) {
 		ArrayList<Integer> initList = getWordLists(word);
 		HashSet<String> wordSet = hyponyms(initList);

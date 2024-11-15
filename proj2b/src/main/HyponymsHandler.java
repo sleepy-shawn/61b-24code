@@ -20,7 +20,7 @@ public class HyponymsHandler extends NgordnetQueryHandler {
 		List<String> words = q.words();
 		String response = "";
 		for (String word : words) {
-			response += wordParser.hyponysList(word) + "\n";
+			response += wordParser.hyponymsList(word) + "\n";
 		}
 		return response;
 	}
