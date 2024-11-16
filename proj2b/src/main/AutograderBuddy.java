@@ -1,6 +1,8 @@
 package main;
 
 import browser.NgordnetQueryHandler;
+import graph.Parser;
+import ngrams.NGramMap;
 
 
 public class AutograderBuddy {
@@ -9,6 +11,8 @@ public class AutograderBuddy {
             String wordFile, String countFile,
             String synsetFile, String hyponymFile) {
 
-        throw new RuntimeException("Please fill out AutograderBuddy.java!");
+        Parser parser = new Parser(synsetFile, hyponymFile);
+	    NGramMap ng = new NGramMap(wordFile, countFile);
+	    return new HyponymsHandler(parser, ng);
     }
 }

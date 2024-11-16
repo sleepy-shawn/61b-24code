@@ -68,9 +68,7 @@ public class NGramMap {
             startYear = Math.max(MIN_YEAR, startYear);
             endYear = Math.min(MAX_YEAR, endYear);
             TimeSeries wordSeries = wordMap.get(word);
-            if (yearContain(wordSeries, startYear) || yearContain(wordSeries, endYear)) {
-                return new TimeSeries(wordSeries, startYear, endYear);
-            }
+            return new TimeSeries(wordSeries, startYear, endYear);
         }
         return new TimeSeries();
     }
@@ -155,6 +153,20 @@ public class NGramMap {
         return sumWeight;
     }
 
+    /* Sum the total occurrence times of a word in the given period */
+    public Double sumHistory(String word, int startYear, int endYear) {
+        TimeSeries wordHistory = countHistory(word, startYear, endYear);
+        Double sumCount = 0.0;
+        for (int i = startYear; i <= endYear; i += 1) {
+            if (wordHistory.containsKey(i)) {
+                sumCount += wordHistory.get(i);
+            }
+        }
+        return sumCount;
+    }
+
+
+    /* Helper method */
     private boolean yearContain(TimeSeries word, int year) {
         return word.years().contains(year);
     }
