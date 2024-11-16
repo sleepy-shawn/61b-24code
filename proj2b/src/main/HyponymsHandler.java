@@ -36,13 +36,15 @@ public class HyponymsHandler extends NgordnetQueryHandler {
 			return allHyponyms.toString();
 		}
 		HashMap<String, Double> wordsCount = new HashMap<>();
-		PriorityQueue<String> wordQueue = new PriorityQueue<>(Comparator.comparingDouble(wordsCount::get).reversed());
 		ArrayList<String> allHyponyms = wordParser.sharedHyponyms(words);
 
 		for (String word : allHyponyms) {
 			wordsCount.put(word, ng.sumHistory(word, startYear, endYear));
-			wordQueue.add(word);
 		}
+
+		PriorityQueue<String> wordQueue = new PriorityQueue<>(Comparator.comparingDouble(wordsCount::get).reversed());
+		wordQueue.addAll(allHyponyms);
+
 		ArrayList<String> finalList = new ArrayList<>();
 		for (int i = 0; i < k; i += 1) {
 			if (wordQueue.isEmpty()) {

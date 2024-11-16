@@ -33,8 +33,8 @@ public class Main {
     public static void main(String[] args) {
         NgordnetServer hns = new NgordnetServer();
 
-        NGramMap ng = new NGramMap(WORDS_FILE, TOTAL_COUNTS_FILE);
-        Parser wordParser = new Parser(LARGE_SYNSET_FILE, LARGE_HYPONYM_FILE);
+        NGramMap ng = new NGramMap(FREQUENCY_EECS_FILE, TOTAL_COUNTS_FILE);
+        Parser wordParser = new Parser(SYNSETS_EECS_FILE, HYPONYMS_EECS_FILE);
         hns.startUp();
         hns.register("history", new DummyHistoryHandler());
         hns.register("historytext", new DummyHistoryTextHandler());
